@@ -9,8 +9,9 @@ const _ExtensionTag_name = "ExtensionTagEXIFExtensionTagICCPExtensionTagXMPExten
 var _ExtensionTag_index = [...]uint8{16, 32, 47, 68}
 
 func (i ExtensionTag) String() string {
+	i -= 1
 	if i < 0 || i >= ExtensionTag(len(_ExtensionTag_index)) {
-		return fmt.Sprintf("ExtensionTag(%d)", i)
+		return fmt.Sprintf("ExtensionTag(%d)", i+1)
 	}
 	hi := _ExtensionTag_index[i]
 	lo := uint8(0)
