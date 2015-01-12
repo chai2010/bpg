@@ -10,7 +10,6 @@ and then run these commands:
 
 	1. Assure set the `CGO_ENABLED` environment variable to `1` to enable `CGO` (Default is enabled).
 	2. `go get github.com/chai2010/bpg`
-	2. `go generate github.com/chai2010/bpg`
 	3. `go run hello.go`
 
 

@@ -9,8 +9,8 @@ import (
 )
 
 /*
-#cgo CFLAGS : -I./internal/libbpg-0.9.4
-#cgo LDFLAGS: -L. -lbpg
+#cgo CFLAGS : -I./internal/libbpg-0.9.4 -DCONFIG_BPG_VERSION=0.9.4 -DHAVE_AV_CONFIG_H
+//#cgo LDFLAGS: -L. -lbpg
 
 #include <stdint.h>
 #include <stdlib.h>
