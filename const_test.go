@@ -52,6 +52,7 @@ func TestExtensionTag(t *testing.T) {
 		{ExtensionTagICCP, cgoExtensionTagICCP},
 		{ExtensionTagXMP, cgoExtensionTagXMP},
 		{ExtensionTagTHUMBNAIL, cgoExtensionTagTHUMBNAIL},
+		{ExtensionTagAnimControl, cgoExtensionTagAnimControl},
 	}
 	for i, v := range tests {
 		if v.got != v.expect {
@@ -68,6 +69,8 @@ func TestOutputFormat(t *testing.T) {
 		{OutputFormatRGBA32, cgoOutputFormatRGBA32},
 		{OutputFormatRGB48, cgoOutputFormatRGB48},
 		{OutputFormatRGBA64, cgoOutputFormatRGBA64},
+		{OutputFormatCMYK32, cgoOutputFormatCMYK32},
+		{OutputFormatCMYK64, cgoOutputFormatCMYK64},
 	}
 	for i, v := range tests {
 		if v.got != v.expect {

@@ -9,15 +9,17 @@ import (
 )
 
 type FormatInfo struct {
-	Width              int
-	Height             int
+	Width              uint32
+	Height             uint32
 	Format             Format
 	HasAlpha           bool // true if an alpha plane is present
 	ColorSpace         ColorSpace
-	BitDepth           int
-	PremultipliedAlpha bool // true if the color is alpha premultiplied
-	HasWPlane          bool // true if a W plane is present (for CMYK encoding)
-	LimitedRange       bool // true if limited range for the color
+	BitDepth           uint8
+	PremultipliedAlpha bool   // true if the color is alpha premultiplied
+	HasWPlane          bool   // true if a W plane is present (for CMYK encoding)
+	LimitedRange       bool   // true if limited range for the color
+	HasAnimation       bool   // true if the image contains animations
+	LoopCount          uint16 // animations: number of loop, 0 = infinity
 }
 
 type Extension struct {
@@ -111,6 +113,10 @@ func (p *Decoder) GetInfo() (info FormatInfo, err error) {
 
 func (p *Decoder) GetExtension() (ext []Extension, err error) {
 	return bpg_decoder_get_extension(p.cgoBPGDecoderContext)
+}
+
+func (p *Decoder) GetFrameDuration() (num, den int) {
+	return bpg_decoder_get_frame_duration(p.cgoBPGDecoderContext)
 }
 
 func (p *Decoder) GetImage(outFormat OutputFormat) (m image.Image, err error) {

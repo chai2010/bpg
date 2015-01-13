@@ -9,7 +9,7 @@ const _Format_name = "FormatGRAYFormat420Format422Format444Format420VideoFormat4
 var _Format_index = [...]uint8{10, 19, 28, 37, 51, 65, 74}
 
 func (i Format) String() string {
-	if i < 0 || i >= Format(len(_Format_index)) {
+	if i >= Format(len(_Format_index)) {
 		return fmt.Sprintf("Format(%d)", i)
 	}
 	hi := _Format_index[i]

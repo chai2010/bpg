@@ -9,7 +9,7 @@ const _ColorSpace_name = "ColorSpaceYCbCrColorSpaceRGBColorSpaceYCgCoColorSpaceY
 var _ColorSpace_index = [...]uint8{15, 28, 43, 63, 84, 97}
 
 func (i ColorSpace) String() string {
-	if i < 0 || i >= ColorSpace(len(_ColorSpace_index)) {
+	if i >= ColorSpace(len(_ColorSpace_index)) {
 		return fmt.Sprintf("ColorSpace(%d)", i)
 	}
 	hi := _ColorSpace_index[i]

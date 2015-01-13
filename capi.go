@@ -9,13 +9,12 @@ import (
 )
 
 /*
-#cgo CFLAGS : -I./internal/libbpg-0.9.5 -DCONFIG_BPG_VERSION=0.9.5 -DHAVE_AV_CONFIG_H
+#cgo CFLAGS : -I./internal/libbpg-0.9.5 -DCONFIG_BPG_VERSION=0.9.5 -DUSE_VAR_BIT_DEPTH -DUSE_PRED -DHAVE_AV_CONFIG_H
 //#cgo LDFLAGS: -L. -lbpg
 
 #include <stdint.h>
 #include <stdlib.h>
 #include <libbpg.h>
-
 
 // return 0 if 0K, < 0 if error
 struct cgo_bpg_decoder_get_info_return {
@@ -24,6 +23,17 @@ struct cgo_bpg_decoder_get_info_return {
 } cgo_bpg_decoder_get_info(BPGDecoderContext* p) {
 	struct cgo_bpg_decoder_get_info_return t;
 	t.retCode = bpg_decoder_get_info(p, &t.info);
+	return t;
+}
+
+// return the frame delay for animations as a fraction (*pnum) / (*pden)
+// in seconds. In case there is no animation, 0 / 1 is returned.
+struct cgo_bpg_decoder_get_frame_duration_return {
+	int num;
+	int den;
+} cgo_bpg_decoder_get_frame_duration(BPGDecoderContext* p) {
+	struct cgo_bpg_decoder_get_frame_duration_return t;
+	bpg_decoder_get_frame_duration(p, &t.num, &t.den);
 	return t;
 }
 
@@ -134,10 +144,11 @@ const (
 )
 
 const (
-	cgoExtensionTagEXIF      = ExtensionTag(C.BPG_EXTENSION_TAG_EXIF)
-	cgoExtensionTagICCP      = ExtensionTag(C.BPG_EXTENSION_TAG_ICCP)
-	cgoExtensionTagXMP       = ExtensionTag(C.BPG_EXTENSION_TAG_XMP)
-	cgoExtensionTagTHUMBNAIL = ExtensionTag(C.BPG_EXTENSION_TAG_THUMBNAIL)
+	cgoExtensionTagEXIF        = ExtensionTag(C.BPG_EXTENSION_TAG_EXIF)
+	cgoExtensionTagICCP        = ExtensionTag(C.BPG_EXTENSION_TAG_ICCP)
+	cgoExtensionTagXMP         = ExtensionTag(C.BPG_EXTENSION_TAG_XMP)
+	cgoExtensionTagTHUMBNAIL   = ExtensionTag(C.BPG_EXTENSION_TAG_THUMBNAIL)
+	cgoExtensionTagAnimControl = ExtensionTag(C.BPG_EXTENSION_TAG_ANIM_CONTROL)
 )
 
 const (
@@ -145,6 +156,8 @@ const (
 	cgoOutputFormatRGBA32 = OutputFormat(C.BPG_OUTPUT_FORMAT_RGBA32)
 	cgoOutputFormatRGB48  = OutputFormat(C.BPG_OUTPUT_FORMAT_RGB48)
 	cgoOutputFormatRGBA64 = OutputFormat(C.BPG_OUTPUT_FORMAT_RGBA64)
+	cgoOutputFormatCMYK32 = OutputFormat(C.BPG_OUTPUT_FORMAT_CMYK32)
+	cgoOutputFormatCMYK64 = OutputFormat(C.BPG_OUTPUT_FORMAT_CMYK64)
 )
 
 const (
@@ -215,15 +228,17 @@ func bpg_decoder_get_info(p *cgoBPGDecoderContext) (info FormatInfo, err error) 
 		return
 	}
 	info = FormatInfo{
-		Width:              int(rv.info.width),
-		Height:             int(rv.info.height),
+		Width:              uint32(rv.info.width),
+		Height:             uint32(rv.info.height),
 		Format:             Format(rv.info.format),
 		HasAlpha:           bool(rv.info.has_alpha != 0),
 		ColorSpace:         ColorSpace(rv.info.color_space),
-		BitDepth:           int(rv.info.bit_depth),
+		BitDepth:           uint8(rv.info.bit_depth),
 		PremultipliedAlpha: bool(rv.info.premultiplied_alpha != 0),
 		HasWPlane:          bool(rv.info.has_w_plane != 0),
 		LimitedRange:       bool(rv.info.limited_range != 0),
+		HasAnimation:       bool(rv.info.has_animation != 0),
+		LoopCount:          uint16(rv.info.loop_count),
 	}
 	return
 }
@@ -239,6 +254,17 @@ func bpg_decoder_get_extension(p *cgoBPGDecoderContext) (ext []Extension, err er
 			Data: C.GoBytes(unsafe.Pointer(x.buf), C.int(x.buf_len)),
 		})
 	}
+	return
+}
+
+// return the frame delay for animations as a fraction (num) / (den)
+// in seconds. In case there is no animation, 0 / 1 is returned.
+func bpg_decoder_get_frame_duration(p *cgoBPGDecoderContext) (num, den int) {
+	rv := C.cgo_bpg_decoder_get_frame_duration(
+		(*C.BPGDecoderContext)(p),
+	)
+	num = int(rv.num)
+	den = int(rv.den)
 	return
 }
 
@@ -280,6 +306,12 @@ func bpg_decoder_get_image(p *cgoBPGDecoderContext, format OutputFormat) (m imag
 			Stride: stride,
 			Rect:   rect,
 		}
+		return
+	case OutputFormatCMYK32:
+		err = fmt.Errorf("bpg: bpg_decoder_get_image, unsupport OutputFormatCMYK32")
+		return
+	case OutputFormatCMYK64:
+		err = fmt.Errorf("bpg: bpg_decoder_get_image, unsupport OutputFormatCMYK64")
 		return
 	default:
 		panic("bpg: bpg_decoder_get_image, unreachable")

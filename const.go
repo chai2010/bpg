@@ -17,7 +17,7 @@ const (
 	maxHeaderSize = 1024
 )
 
-type Format int
+type Format uint8
 
 const (
 	FormatGRAY     Format = iota
@@ -29,7 +29,7 @@ const (
 	FormatMax
 )
 
-type ColorSpace int
+type ColorSpace uint8
 
 const (
 	ColorSpaceYCbCr ColorSpace = iota
@@ -40,7 +40,7 @@ const (
 	ColorSpaceMax
 )
 
-type ExtensionTag int
+type ExtensionTag uint8
 
 const (
 	_ ExtensionTag = iota
@@ -48,13 +48,16 @@ const (
 	ExtensionTagICCP
 	ExtensionTagXMP
 	ExtensionTagTHUMBNAIL
+	ExtensionTagAnimControl
 )
 
-type OutputFormat int
+type OutputFormat uint8
 
 const (
 	OutputFormatRGB24 OutputFormat = iota
 	OutputFormatRGBA32
 	OutputFormatRGB48
 	OutputFormatRGBA64
+	OutputFormatCMYK32
+	OutputFormatCMYK64
 )

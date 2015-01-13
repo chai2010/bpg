@@ -24,8 +24,8 @@ func DecodeConfig(r io.Reader) (config image.Config, err error) {
 	if err != nil {
 		return
 	}
-	config.Width = info.Width
-	config.Height = info.Height
+	config.Width = int(info.Width)
+	config.Height = int(info.Height)
 	if info.BitDepth == 8 {
 		config.ColorModel = color.RGBAModel
 	} else {

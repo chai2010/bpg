@@ -83,6 +83,7 @@ var sourceFileList = []string{
 	"libavcodec/utils.c",
 	"libavcodec/cabac.c",
 	"libavcodec/golomb.c",
+	"libavcodec/videodsp.c",
 
 	// libavutil
 	"libavutil/mem.c",

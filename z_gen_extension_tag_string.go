@@ -4,13 +4,13 @@ package bpg
 
 import "fmt"
 
-const _ExtensionTag_name = "ExtensionTagEXIFExtensionTagICCPExtensionTagXMPExtensionTagTHUMBNAIL"
+const _ExtensionTag_name = "ExtensionTagEXIFExtensionTagICCPExtensionTagXMPExtensionTagTHUMBNAILExtensionTagAnimControl"
 
-var _ExtensionTag_index = [...]uint8{16, 32, 47, 68}
+var _ExtensionTag_index = [...]uint8{16, 32, 47, 68, 91}
 
 func (i ExtensionTag) String() string {
 	i -= 1
-	if i < 0 || i >= ExtensionTag(len(_ExtensionTag_index)) {
+	if i >= ExtensionTag(len(_ExtensionTag_index)) {
 		return fmt.Sprintf("ExtensionTag(%d)", i+1)
 	}
 	hi := _ExtensionTag_index[i]

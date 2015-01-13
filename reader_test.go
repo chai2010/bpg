@@ -6,6 +6,7 @@ package bpg
 
 import (
 	"image"
+	_ "image/gif"
 	_ "image/png"
 	"os"
 	"testing"
@@ -35,7 +36,25 @@ func TestDecode(t *testing.T) {
 	}
 
 	// Compare the average delta to the tolerance level.
-	want := 15
+	want := 0
+	if got := averageDelta(img0, img1); got > want {
+		t.Fatalf("average delta too high; got %d, want <= %d", got, want)
+	}
+}
+
+func TestDecodeAnimation(t *testing.T) {
+	img0, err := loadImage("clock.gif")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	img1, err := loadImage("clock.bpg")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Compare the average delta to the tolerance level.
+	want := 40 // warning: too large !!!
 	if got := averageDelta(img0, img1); got > want {
 		t.Fatalf("average delta too high; got %d, want <= %d", got, want)
 	}

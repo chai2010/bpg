@@ -4,12 +4,12 @@ package bpg
 
 import "fmt"
 
-const _OutputFormat_name = "OutputFormatRGB24OutputFormatRGBA32OutputFormatRGB48OutputFormatRGBA64"
+const _OutputFormat_name = "OutputFormatRGB24OutputFormatRGBA32OutputFormatRGB48OutputFormatRGBA64OutputFormatCMYK32OutputFormatCMYK64"
 
-var _OutputFormat_index = [...]uint8{17, 35, 52, 70}
+var _OutputFormat_index = [...]uint8{17, 35, 52, 70, 88, 106}
 
 func (i OutputFormat) String() string {
-	if i < 0 || i >= OutputFormat(len(_OutputFormat_index)) {
+	if i >= OutputFormat(len(_OutputFormat_index)) {
 		return fmt.Sprintf("OutputFormat(%d)", i)
 	}
 	hi := _OutputFormat_index[i]
