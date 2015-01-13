@@ -1,6 +1,8 @@
 
 #include "bpgenc.h"
 
+#include <stdlib.h>
+
 static void get_plane_res(Image *img, int *pw, int *ph, int i)
 {
     if (img->format == BPG_FORMAT_420 && (i == 1 || i == 2)) {

@@ -9,8 +9,10 @@ import (
 )
 
 /*
-#cgo CFLAGS : -I./internal/libbpg-0.9.5 -DCONFIG_BPG_VERSION=0.9.5 -DUSE_VAR_BIT_DEPTH -DUSE_PRED -DHAVE_AV_CONFIG_H
-//#cgo LDFLAGS: -L. -lbpg
+#cgo CFLAGS   : -I./internal/libbpg-0.9.5 -I./internal/libbpg-0.9.5/jctvc -DCONFIG_BPG_VERSION=0.9.5 -DUSE_VAR_BIT_DEPTH -DUSE_JCTVC -DUSE_PRED -DHAVE_AV_CONFIG_H
+#cgo CXXFLAGS : -I./internal/libbpg-0.9.5 -I./internal/libbpg-0.9.5/jctvc -DCONFIG_BPG_VERSION=0.9.5 -DUSE_VAR_BIT_DEPTH -DUSE_JCTVC -DUSE_PRED -DHAVE_AV_CONFIG_H
+
+#cgo windows LDFLAGS: -L. -lbpg
 
 #include <stdint.h>
 #include <stdlib.h>
