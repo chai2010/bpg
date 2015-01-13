@@ -2,14 +2,14 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-TARG=bpg
+TARG:=bpg
 
-BPG_VER=0.9.5
-BPG_DIR=./internal/libbpg-$(BPG_VER)
+BPG_VER:=0.9.5
+BPG_DIR:=./internal/libbpg-$(BPG_VER)
 
 # -----------------------------------------------------------------------------
 
-BPG_FFMPEG_INC=-I$(BPG_DIR)
+BPG_FFMPEG_INC:=-I$(BPG_DIR)
 BPG_FFMPEG_OBJ:=$(addprefix $(BPG_DIR)/libavcodec/,  \
 	hevc_cabac.o                                     \
 	hevc_filter.o                                    \
@@ -23,6 +23,7 @@ BPG_FFMPEG_OBJ:=$(addprefix $(BPG_DIR)/libavcodec/,  \
 	utils.o                                          \
 	cabac.o                                          \
 	golomb.o                                         \
+	videodsp.o                                       \
 )
 BPG_FFMPEG_OBJ+=$(addprefix $(BPG_DIR)/libavutil/,   \
 	mem.o                                            \
@@ -35,25 +36,88 @@ BPG_FFMPEG_OBJ+=$(addprefix $(BPG_DIR)/libavutil/,   \
 
 # -----------------------------------------------------------------------------
 
-BPG_INC=$(BPG_FFMPEG_INC)
-BPG_OBJ=$(BPG_FFMPEG_OBJ) $(BPG_DIR)/libbpg.c
-BPG_DEF=libbpg.def
+BPG_JCTVC_INC:=-I$(BPG_DIR)/jctvc
+BPG_JCTVC_OBJ:=$(addprefix $(BPG_DIR)/jctvc/TLibEncoder/, \
+	SyntaxElementWriter.o                                 \
+	TEncSbac.o                                            \
+	TEncBinCoderCABACCounter.o                            \
+	TEncGOP.o                                             \
+	TEncSampleAdaptiveOffset.o                            \
+	TEncBinCoderCABAC.o                                   \
+	TEncAnalyze.o                                         \
+	TEncEntropy.o                                         \
+	TEncTop.o                                             \
+	SEIwrite.o                                            \
+	TEncPic.o                                             \
+	TEncRateCtrl.o                                        \
+	WeightPredAnalysis.o                                  \
+	TEncSlice.o                                           \
+	TEncCu.o                                              \
+	NALwrite.o                                            \
+	TEncCavlc.o                                           \
+	TEncSearch.o                                          \
+	TEncPreanalyzer.o                                     \
+)
+BPG_JCTVC_OBJ+=$(addprefix $(BPG_DIR)/jctvc/TLibVideoIO/, \
+	TVideoIOYuv.o                                         \
+)
+BPG_JCTVC_OBJ+=$(addprefix $(BPG_DIR)/jctvc/TLibCommon/,  \
+	TComWeightPrediction.o                                \
+	TComLoopFilter.o                                      \
+	TComBitStream.o                                       \
+	TComMotionInfo.o                                      \
+	TComSlice.o                                           \
+	ContextModel3DBuffer.o                                \
+	TComPic.o                                             \
+	TComRdCostWeightPrediction.o                          \
+	TComTU.o                                              \
+	TComPicSym.o                                          \
+	TComPicYuv.o                                          \
+	TComYuv.o                                             \
+	TComTrQuant.o                                         \
+	TComInterpolationFilter.o                             \
+	ContextModel.o                                        \
+	TComSampleAdaptiveOffset.o                            \
+	SEI.o                                                 \
+	TComPrediction.o                                      \
+	TComDataCU.o                                          \
+	TComChromaFormat.o                                    \
+	Debug.o                                               \
+	TComRom.o                                             \
+	TComPicYuvMD5.o                                       \
+	TComRdCost.o                                          \
+	TComPattern.o                                         \
+	TComCABACTables.o                                     \
+)
+BPG_JCTVC_OBJ+=$(addprefix $(BPG_DIR)/jctvc/libmd5/,      \
+	libmd5.o                                              \
+)
+
+BPG_JCTVC_OBJ+=$(addprefix $(BPG_DIR)/jctvc/,             \
+	TAppEncCfg.o                                          \
+	TAppEncTop.o                                          \
+	program_options_lite.o                                \
+)
+
+# -----------------------------------------------------------------------------
+
+BPG_INC:=$(BPG_FFMPEG_INC) $(BPG_JCTVC_INC)
+BPG_OBJ:=$(BPG_FFMPEG_OBJ) $(BPG_JCTVC_OBJ)
+BPG_OBJ+=$(addprefix $(BPG_DIR)/,                         \
+	libbpg.o                                              \
+	bpgenc_util.o                                         \
+	jctvc_glue.o                                          \
+)
+BPG_DEF:=libbpg.def
+
+# -----------------------------------------------------------------------------
 
 CC:=gcc
-CCFLAGS:=$(BPG_INC) -DCONFIG_BPG_VERSION=\"$(BPG_VER)\"
-CCFLAGS+=-Os -Wall -MMD -fno-asynchronous-unwind-tables
-CCFLAGS+=-fdata-sections -ffunction-sections -fno-math-errno
-CCFLAGS+=-fno-signed-zeros -fno-tree-vectorize -fomit-frame-pointer
-CCFLAGS+=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_REENTRANT
-CCFLAGS+=-D_ISOC99_SOURCE -D_POSIX_C_SOURCE=200112 -D_XOPEN_SOURCE=600 -DHAVE_AV_CONFIG_H -D_GNU_SOURCE=1 -DUSE_VAR_BIT_DEPTH
-CCFLAGS+=-DRExt__HIGH_BIT_DEPTH_SUPPORT
-CCFLAGS+=-Wno-unused-function -Wno-unused-variable -Wno-unused-label
-CCFLAGS+=-Wno-sign-compare -Wno-pointer-sign -Wno-maybe-uninitialized
-CCFLAGS+=-Wno-switch -Wno-parentheses
-LDFLAGS=
+CCFLAGS:=$(BPG_INC) -DCONFIG_BPG_VERSION=\"$(BPG_VER)\" -DUSE_JCTVC -DUSE_VAR_BIT_DEPTH -DHAVE_AV_CONFIG_H
+LDFLAGS:=-lstdc++
 
 default: $(BPG_OBJ) $(BPG_DEF)
-	$(CC) -shared $(CCFLAGS) -o $(TARG).dll $(BPG_OBJ) $(BPG_DEF) -Wl,--out-implib,lib$(TARG).a $(LDFLAGS) 
+	$(CC) -shared $(CCFLAGS) -o $(TARG).dll $(BPG_OBJ) $(BPG_DEF) -Wl,--out-implib,lib$(TARG).a $(LDFLAGS)
 
 clean:
 	-rm $(BPG_OBJ)

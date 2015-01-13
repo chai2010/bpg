@@ -27,6 +27,8 @@ extern "C" {
 
 #include "libbpg.h"
 
+#include <stdio.h>
+
 typedef struct {
     int w, h;
     BPGImageFormatEnum format; /* x_VIDEO values are forbidden here */
@@ -72,6 +74,8 @@ int x265_encode_picture(uint8_t **pbuf, Image *img,
                         const HEVCEncodeParams *params);
 void save_yuv1(Image *img, FILE *f);
 void save_yuv(Image *img, const char *filename);
+
+HEVCEncoder* bpg_jctvc_encoder();
 
 #ifdef __cplusplus
 }

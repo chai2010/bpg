@@ -7,9 +7,11 @@ bpg_decoder_decode
 bpg_decoder_get_extension_data
 bpg_decoder_get_info
 bpg_decoder_start
+bpg_decoder_get_frame_duration
 bpg_decoder_get_line
 bpg_decoder_close
 bpg_decoder_get_data
 bpg_decoder_get_info_from_buf
 bpg_decoder_free_extension_data
 
+bpg_jctvc_encoder

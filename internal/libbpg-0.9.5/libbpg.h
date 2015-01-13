@@ -24,6 +24,8 @@
 #ifndef _LIBBPG_H
 #define _LIBBPG_H
 
+#include <stdint.h>
+
 typedef struct BPGDecoderContext BPGDecoderContext;
 
 typedef enum {
