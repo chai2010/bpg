@@ -6,4 +6,9 @@ setlocal
 
 cd %~dp0
 
-go run ../tools/webserver.go -port=9527
+set bpgdec=..\internal\bpg-0.9.5-win32\bpgdec.exe
+set bpgenc=..\internal\bpg-0.9.5-win32\bpgenc.exe
+set bpgview=..\internal\bpg-0.9.5-win32\bpgview.exe
+
+%bpgview% clock.bpg
+

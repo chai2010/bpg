@@ -6,4 +6,4 @@
 
 // +build cgo
 
-#include "./internal/libbpg-0.9.4/libavcodec/hevc.c"
+#include "./internal/libbpg-0.9.5/libavcodec/hevc.c"

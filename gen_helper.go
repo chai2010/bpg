@@ -50,7 +50,7 @@ func genIncludeFiles() {
 
 // +build cgo
 
-#include "./internal/libbpg-0.9.4/%s"
+#include "./internal/libbpg-0.9.5/%s"
 `, relpath,
 		)), 0666)
 

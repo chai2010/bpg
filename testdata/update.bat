@@ -6,6 +6,12 @@ setlocal
 
 cd %~dp0
 
-del /Q                 lena512color.png
-..\tools\bpgdec.exe -o lena512color.png lena512color.bpg
+set bpgdec=..\internal\bpg-0.9.5-win32\bpgdec.exe
+set bpgenc=..\internal\bpg-0.9.5-win32\bpgenc.exe
+set bpgview=..\internal\bpg-0.9.5-win32\bpgview.exe
+
+%bpgdec% -o lena512color.png lena512color.bpg
+
+%bpgdec% -o clock.gif clock.bpg
+%bpgdec% -o clock.png clock.bpg
 

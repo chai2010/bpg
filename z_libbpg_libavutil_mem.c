@@ -6,4 +6,4 @@
 
 // +build cgo
 
-#include "./internal/libbpg-0.9.4/libavutil/mem.c"
+#include "./internal/libbpg-0.9.5/libavutil/mem.c"
