@@ -17,6 +17,7 @@ import (
 #include <stdint.h>
 #include <stdlib.h>
 #include <libbpg.h>
+#include <bpgenc.h>
 
 // return 0 if 0K, < 0 if error
 struct cgo_bpg_decoder_get_info_return {
@@ -105,6 +106,41 @@ struct cgo_bpg_decoder_get_image_return {
 	return t;
 }
 
+struct cgo_bpg_encode_return {
+	int retCode;
+	void* ptr;
+	int ptr_size;
+} cgo_bpg_encode(Image* img, HEVCEncodeParams* params) {
+	struct cgo_bpg_encode_return t;
+	HEVCEncoder* encoder = bpg_jctvc_encoder();
+	HEVCEncoderContext* ctx;
+
+	ctx = encoder->open(params);
+
+	t.retCode = encoder->encode(ctx, img);
+	if(t.retCode < 0) {
+		t.ptr_size = encoder->close(ctx, (uint8_t**)(&t.ptr));
+		if(t.ptr != NULL) {
+			free(t.ptr);
+			t.ptr = NULL;
+		}
+		return t;
+	}
+	t.retCode = encoder->close(ctx, (uint8_t**)(&t.ptr));
+	if(t.retCode <= 0) {
+		if(t.retCode == 0) {
+			t.retCode = -1;
+		}
+		if(t.ptr != NULL) {
+			free(t.ptr);
+			t.ptr = NULL;
+		}
+	}
+	t.ptr_size = t.retCode;
+	t.retCode = 0;
+	return t;
+}
+
 */
 import "C"
 import (
@@ -118,7 +154,8 @@ import (
 // ----------------------------------------------------------------------------
 
 type (
-	cgoBPGDecoderContext C.BPGDecoderContext
+	cgoBPGDecoderContext  C.BPGDecoderContext
+	cgoHEVCEncoderContext C.HEVCEncoderContext
 )
 
 // ----------------------------------------------------------------------------
@@ -167,7 +204,7 @@ const (
 )
 
 // ----------------------------------------------------------------------------
-// func
+// encode api
 // ----------------------------------------------------------------------------
 
 // open/close
@@ -318,6 +355,27 @@ func bpg_decoder_get_image(p *cgoBPGDecoderContext, format OutputFormat) (m imag
 	default:
 		panic("bpg: bpg_decoder_get_image, unreachable")
 	}
+}
+
+// ----------------------------------------------------------------------------
+// decode api
+// ----------------------------------------------------------------------------
+
+func bpg_encode(m *EncodeImage, opt *EncodeParams) (data []byte, err error) {
+	panic("TODO")
+
+	img := &C.Image{}               // TODO: ...
+	params := &C.HEVCEncodeParams{} // TODO: ...
+	rv := C.cgo_bpg_encode(img, params)
+	if rv.retCode <= 0 {
+		err = fmt.Errorf("bpg: bpg_encoder_encode, errcode = %d", rv.retCode)
+		return
+	}
+
+	data = make([]byte, int(rv.ptr_size))
+	copy(data, ((*[1 << 30]byte)(unsafe.Pointer(rv.ptr)))[0:len(data):len(data)])
+	C.free(unsafe.Pointer(rv.ptr))
+	return
 }
 
 // ----------------------------------------------------------------------------

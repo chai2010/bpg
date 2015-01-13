@@ -8,25 +8,6 @@ import (
 	"image"
 )
 
-type FormatInfo struct {
-	Width              uint32
-	Height             uint32
-	Format             Format
-	HasAlpha           bool // true if an alpha plane is present
-	ColorSpace         ColorSpace
-	BitDepth           uint8
-	PremultipliedAlpha bool   // true if the color is alpha premultiplied
-	HasWPlane          bool   // true if a W plane is present (for CMYK encoding)
-	LimitedRange       bool   // true if limited range for the color
-	HasAnimation       bool   // true if the image contains animations
-	LoopCount          uint16 // animations: number of loop, 0 = infinity
-}
-
-type Extension struct {
-	Tag  ExtensionTag
-	Data []byte
-}
-
 func DecodeInfo(data []byte) (info FormatInfo, err error) {
 	d := NewDecoder()
 	defer d.Close()
