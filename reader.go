@@ -11,7 +11,7 @@ import (
 	"io/ioutil"
 )
 
-// DecodeConfig returns the color model and dimensions of a WEBP image without
+// DecodeConfig returns the color model and dimensions of a BPG image without
 // decoding the entire image.
 func DecodeConfig(r io.Reader) (config image.Config, err error) {
 	header := make([]byte, maxHeaderSize)
@@ -34,7 +34,7 @@ func DecodeConfig(r io.Reader) (config image.Config, err error) {
 	return
 }
 
-// Decode reads a WEBP image from r and returns it as an image.Image.
+// Decode reads a BPG image from r and returns it as an image.Image.
 func Decode(r io.Reader) (m image.Image, err error) {
 	data, err := ioutil.ReadAll(r)
 	if err != nil {
