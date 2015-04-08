@@ -9,7 +9,7 @@ import (
 )
 
 /*
-#cgo CFLAGS : -I./internal/libbpg-0.9.5 -DCONFIG_BPG_VERSION=0.9.5 -DUSE_VAR_BIT_DEPTH -DUSE_PRED -DHAVE_AV_CONFIG_H
+#cgo CFLAGS : -I./internal/libbpg-0.9.5 -DCONFIG_BPG_VERSION=0.9.5 -DUSE_VAR_BIT_DEPTH -DUSE_PRED -DHAVE_AV_CONFIG_H -Wno-pointer-sign -Wno-dangling-else -Wno-logical-op-parentheses -Wno-switch
 //#cgo LDFLAGS: -L. -lbpg
 
 #include <stdint.h>
