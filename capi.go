@@ -9,7 +9,15 @@ import (
 )
 
 /*
-#cgo CFLAGS : -I./internal/libbpg-0.9.5 -DCONFIG_BPG_VERSION=0.9.5 -DUSE_VAR_BIT_DEPTH -DUSE_PRED -DHAVE_AV_CONFIG_H -Wno-pointer-sign -Wno-dangling-else -Wno-logical-op-parentheses -Wno-switch
+#cgo CPPFLAGS: -fno-var-tracking-assignments
+
+#cgo CPPFLAGS: -DCONFIG_BPG_VERSION=0.9.5
+#cgo CPPFLAGS: -DUSE_VAR_BIT_DEPTH
+#cgo CPPFLAGS: -DUSE_PRED
+#cgo CPPFLAGS: -DHAVE_AV_CONFIG_H
+
+#cgo CPPFLAGS: -I./internal/libbpg-0.9.5
+#cgo CPPFLAGS: -I./internal/libbpg-0.9.5/jctvc
 
 #include <stdint.h>
 #include <stdlib.h>

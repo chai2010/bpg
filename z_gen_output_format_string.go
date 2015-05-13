@@ -6,16 +6,11 @@ import "fmt"
 
 const _OutputFormat_name = "OutputFormatRGB24OutputFormatRGBA32OutputFormatRGB48OutputFormatRGBA64OutputFormatCMYK32OutputFormatCMYK64"
 
-var _OutputFormat_index = [...]uint8{17, 35, 52, 70, 88, 106}
+var _OutputFormat_index = [...]uint8{0, 17, 35, 52, 70, 88, 106}
 
 func (i OutputFormat) String() string {
-	if i >= OutputFormat(len(_OutputFormat_index)) {
+	if i+1 >= OutputFormat(len(_OutputFormat_index)) {
 		return fmt.Sprintf("OutputFormat(%d)", i)
 	}
-	hi := _OutputFormat_index[i]
-	lo := uint8(0)
-	if i > 0 {
-		lo = _OutputFormat_index[i-1]
-	}
-	return _OutputFormat_name[lo:hi]
+	return _OutputFormat_name[_OutputFormat_index[i]:_OutputFormat_index[i+1]]
 }

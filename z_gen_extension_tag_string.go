@@ -6,17 +6,12 @@ import "fmt"
 
 const _ExtensionTag_name = "ExtensionTagEXIFExtensionTagICCPExtensionTagXMPExtensionTagTHUMBNAILExtensionTagAnimControl"
 
-var _ExtensionTag_index = [...]uint8{16, 32, 47, 68, 91}
+var _ExtensionTag_index = [...]uint8{0, 16, 32, 47, 68, 91}
 
 func (i ExtensionTag) String() string {
 	i -= 1
-	if i >= ExtensionTag(len(_ExtensionTag_index)) {
+	if i+1 >= ExtensionTag(len(_ExtensionTag_index)) {
 		return fmt.Sprintf("ExtensionTag(%d)", i+1)
 	}
-	hi := _ExtensionTag_index[i]
-	lo := uint8(0)
-	if i > 0 {
-		lo = _ExtensionTag_index[i-1]
-	}
-	return _ExtensionTag_name[lo:hi]
+	return _ExtensionTag_name[_ExtensionTag_index[i]:_ExtensionTag_index[i+1]]
 }

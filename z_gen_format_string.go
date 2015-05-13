@@ -6,16 +6,11 @@ import "fmt"
 
 const _Format_name = "FormatGRAYFormat420Format422Format444Format420VideoFormat422VideoFormatMax"
 
-var _Format_index = [...]uint8{10, 19, 28, 37, 51, 65, 74}
+var _Format_index = [...]uint8{0, 10, 19, 28, 37, 51, 65, 74}
 
 func (i Format) String() string {
-	if i >= Format(len(_Format_index)) {
+	if i+1 >= Format(len(_Format_index)) {
 		return fmt.Sprintf("Format(%d)", i)
 	}
-	hi := _Format_index[i]
-	lo := uint8(0)
-	if i > 0 {
-		lo = _Format_index[i-1]
-	}
-	return _Format_name[lo:hi]
+	return _Format_name[_Format_index[i]:_Format_index[i+1]]
 }
