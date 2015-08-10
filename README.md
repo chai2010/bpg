@@ -1,5 +1,8 @@
 # BPG for Go1.5+
 
+[![Build Status](https://travis-ci.org/chai2010/bpg.svg)](https://travis-ci.org/chai2010/bpg)
+[![GoDoc](https://godoc.org/github.com/chai2010/bpg?status.svg)](https://godoc.org/github.com/chai2010/bpg)
+
 BPG is defined at:
 http://bellard.org/bpg/
 
