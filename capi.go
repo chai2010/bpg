@@ -2,6 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// cgoSafePtr/cgoFreePtr removed!
+//
+// Go1.3: Changes to the garbage collector
+// http://golang.org/doc/go1.3#garbage_collector
+//
+// Go1.6:
+// https://github.com/golang/proposal/blob/master/design/12416-cgo-pointers.md
+
 package bpg
 
 import (
@@ -203,12 +211,10 @@ func bpg_decoder_decode(p *cgoBPGDecoderContext, data []byte) (err error) {
 		err = errors.New("bpg: bpg_decoder_decode: bad arguments")
 		return
 	}
-	cData := cgoSafePtr(data)
-	defer cgoFreePtr(cData)
 
 	rv := C.bpg_decoder_decode(
 		(*C.BPGDecoderContext)(p),
-		(*C.uint8_t)(cData),
+		(*C.uint8_t)(unsafe.Pointer(&data[0])),
 		(C.int)(len(data)),
 	)
 	if rv < 0 {
