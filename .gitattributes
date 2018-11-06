@@ -1,1 +1,2 @@
 internal/* linguist-vendored
+*.c linguist-language=go
